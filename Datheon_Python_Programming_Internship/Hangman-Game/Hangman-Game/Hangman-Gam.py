@@ -1,0 +1,134 @@
+
+
+import random
+
+# Read words from file
+file = open("google-10000-english-no-swears.txt", "r")
+words = file.read().splitlines()
+file.close()
+
+# Select a random word
+word = random.choice(words).strip().upper()
+
+# Variables
+guessed = []
+attempts = 6
+
+# Drawings
+stages = [
+    """
+       -----
+       |   |
+       |
+       |
+       |
+    =========
+    """,
+    """
+       -----
+       |   |
+       |   O
+       |
+       |
+    =========
+    """,
+    """
+       -----
+       |   |
+       |   O
+       |   |
+       |
+    =========
+    """,
+    """
+       -----
+       |   |
+       |   O
+       |  /|
+       |
+    =========
+    """,
+    """
+       -----
+       |   |
+       |   O
+       |  /|\\
+       |
+    =========
+    """,
+    """
+       -----
+       |   |
+       |   O
+       |  /|\\
+       |  /
+    =========
+    """,
+    """
+       -----
+       |   |
+       |   O
+       |  /|\\
+       |  / \\
+    =========
+    """
+]
+
+print("===== WELCOME TO HANGMAN =====")
+
+while attempts > 0:
+
+    # Show hidden word
+    display = ""
+
+    for letter in word:
+        if letter in guessed:
+            display = display + letter + " "
+        else:
+            display = display + "_ "
+
+    print("\nWord:", display)
+    print("Attempts left:", attempts)
+
+    # Show drawing
+    print(stages[6 - attempts])
+
+    # Show guessed letters
+    print("Guessed letters:", guessed)
+
+    # Check winning condition
+    if all(letter in guessed for letter in word):
+        print("Congratulations! You guessed the word:", word)
+        print("YOU WIN!")
+        break
+
+    # Take input
+    guess = input("Enter a letter: ").strip().upper()
+
+    # Check input
+    if len(guess) != 1 or not guess.isalpha():
+        print("Please enter only one letter!")
+        continue
+
+    # Check repeated letter
+    if guess in guessed:
+        print("You already guessed this letter!")
+        continue
+
+    guessed.append(guess)
+
+    # Check guessed letter
+    if guess in word:
+        print("Correct guess!")
+    else:
+        print("Wrong guess!")
+        attempts = attempts - 1
+
+# Losing condition
+if attempts == 0:
+    print(stages[6])
+    print("GAME OVER!")
+    print("The correct word was:", word)
+
+
+
